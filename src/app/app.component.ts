@@ -29,4 +29,7 @@ export class AppComponent {
     this.startSSE()
   }
 
+  ngOnDestroy() {
+    this.sseService.stopEventSource()
+  }
 }
