@@ -9,26 +9,24 @@ import { SseService } from "./sse.service";
 export class AppComponent {
   title = 'sse-angular';
   message = null;
-  startSSE: Function;
-  stopSSE: Function;
 
-  constructor(private sseService: SseService) {
-    this.startSSE = () => {
-      this.sseService.startEventSource()
-    }
+  constructor(private sseService: SseService) { }
 
-    this.stopSSE = () => {
-      this.sseService.stopEventSource()
-    }
-  }
-
-  ngOnInit() {
+  startSSE() {
     this.sseService
-      .getServerSentEvent()
+      .startEventSource()
       .subscribe(data => {
         this.message = JSON.parse(data.data);
         console.log(data.data)
       });
+  }
+
+  stopSSE() {
+    this.sseService.stopEventSource()
+  }
+
+  ngOnInit() {
+    this.startSSE()
   }
 
 }

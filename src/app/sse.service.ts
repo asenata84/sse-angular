@@ -32,8 +32,23 @@ export class SseService {
     this.eventSource.close();
   }
 
-  startEventSource() {
+  startEventSource(): Observable<any> {
     this.eventSource.close();
-    this.eventSource = new EventSource(this.url)
+    this.eventSource = new EventSource(this.url);
+
+    return Observable.create((observer: any) => {
+      this.eventSource.onmessage = event => {
+        this._zone.run(() => {
+          observer.next(event);
+        });
+      };
+
+      this.eventSource.onerror = error => {
+        this._zone.run(() => {
+          observer.error(error);
+        });
+      };
+
+    });
   }
 }
